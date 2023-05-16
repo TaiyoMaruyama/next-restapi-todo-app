@@ -1,15 +1,16 @@
-version: "3.9"
+version: "3"
+
 services:
-  postgres:
-    image: postgres:12-alpine
-    container_name: next-todo-app
-    environment:
-      - POSTGRES_USER=process.env.POSTGRES_USER
-      - POSTGRES_PASSWORD=process.env.POSTGRES_PASSWORD
-      - POSTGRES_DB=process.env.POSTGRES_DB
+  db:
+    image: postgres
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+
 volumes:
-  postgres:
+  db-data:
