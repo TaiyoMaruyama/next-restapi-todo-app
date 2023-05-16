@@ -1,0 +1,18 @@
+.create-frame {
+  margin: 100px 0;
+}
+
+.input-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input {
+  width: 80%;
+  padding: 10px;
+}
+
+.edit-button-frame {
+  width: 40%;
+  margin-top: 40px;
+}

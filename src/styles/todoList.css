@@ -1,0 +1,44 @@
+.todos-list {
+  padding: 20px;
+  margin: 20px 0 80px 0;
+  background-color: rgb(255, 238, 205);
+  border-radius: 10px;
+}
+
+.todos-list > ul {
+  list-style: none;
+}
+
+.todos-body > li {
+  margin: 5px 0;
+}
+
+.todo-row,
+.division {
+  display: flex;
+}
+
+.todo-title,
+.todo-title-name {
+  width: 50%;
+}
+
+.todo-progress,
+.todo-progress-name {
+  width: 30%;
+  text-align: center;
+}
+
+.button-frame-name {
+  width: 20%;
+  text-align: center;
+}
+
+.button-frame {
+  width: 10%;
+}
+
+.add-todo {
+  position: fixed;
+  bottom: 50px;
+}

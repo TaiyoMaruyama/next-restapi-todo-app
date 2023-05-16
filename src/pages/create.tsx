@@ -1,18 +1,14 @@
 import Header from "@/Components/common/Header";
-import TodoList from "@/Components/topPage/TodoList";
 import UserInfo from "@/Components/common/UserInfo";
-import Head from "next/head";
+import CreateTodo from "@/Components/create/CreatePage";
 
-export default function Home() {
+export default function CreatePage() {
   return (
     <>
-      <Head>
-        <title>Create Todo App</title>
-      </Head>
       <Header />
       <div className="max-width">
         <UserInfo />
-        <TodoList />
+        <CreateTodo />
       </div>
     </>
   );
