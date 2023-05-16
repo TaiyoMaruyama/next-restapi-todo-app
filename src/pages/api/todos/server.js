@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("./db");
 const app = express();
-const PORT = 3000;
+const PORT = 8000;
 
 app.use(express.json());
 
@@ -10,7 +10,7 @@ app.get("/todos", (req, res) => {
     if (error) {
       throw error;
     }
-    res.status(200).send(json(results.rows));
+    res.status(200).json(results.rows);
   });
 });
 

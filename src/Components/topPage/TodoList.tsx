@@ -1,16 +1,25 @@
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import react from "react";
+import react, { useEffect } from "react";
+import axios from "axios";
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = react.useState();
   const router = useRouter();
 
+  useEffect(() => {
+    axios.get("http://localhost:8000/todos").then((response) => {
+      setTodos(response.data);
+    });
+  }, []);
+
+  // 作成ボタンに対する関数
   const handleCreate = () => {
     router.push("/create");
   };
 
+  // 編集ボタンに対する関数
   const handleEdit = () => {
     router.push("/edit");
   };
