@@ -1,0 +1,16 @@
+.header-frame {
+  background-color: orange;
+}
+
+.header-in-frame {
+  max-width: 1080px;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size: 36px;
+}
