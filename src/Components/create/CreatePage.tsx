@@ -6,17 +6,36 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const CreateTodo: React.FC = () => {
-  const [age, setAge] = React.useState("");
+  const [title, setTitle] = React.useState<string>("");
+  const [progress, setProgress] = React.useState<string>("");
+
   const router = useRouter();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+  const createTitle = async () => {
+    await axios({
+      method: "post",
+      url: "/todos",
+      data: {
+        title: title,
+        progress: progress,
+      },
+    });
+    router.push("/");
+  };
+
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleChangeProgress = (e: SelectChangeEvent) => {
+    setProgress(e.target.value as string);
   };
 
   const handleCreate = () => {
-    router.push("/");
+    createTitle();
   };
 
   const handleCancel = () => {
@@ -27,19 +46,23 @@ const CreateTodo: React.FC = () => {
     <div className="create-frame">
       <p>TODOを記入してください</p>
       <div className="input-form">
-        <input type="text" className="input" />
+        <input
+          type="text"
+          className="input"
+          value={title}
+          onChange={handleChangeTitle}
+        />
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">進捗</InputLabel>
             <Select
-              id="demo-simple-select"
-              value={age}
+              value={progress}
               label="progress"
-              onChange={handleChange}
+              onChange={handleChangeProgress}
             >
-              <MenuItem value={10}>未実施</MenuItem>
-              <MenuItem value={20}>作業中</MenuItem>
-              <MenuItem value={30}>作業完了</MenuItem>
+              <MenuItem value={"NOT_START"}>未実施</MenuItem>
+              <MenuItem value={"DOING"}>作業中</MenuItem>
+              <MenuItem value={"DONE"}>作業完了</MenuItem>
             </Select>
           </FormControl>
         </Box>

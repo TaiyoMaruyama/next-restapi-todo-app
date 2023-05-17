@@ -9,6 +9,12 @@ datasource db {
 
 model Todo {
   id Int @id @default(autoincrement())
-  title String
-  progress String
+  title String 
+  progress Progress
+}
+
+enum Progress {
+  NOT_START
+  DOING
+  DONE
 }

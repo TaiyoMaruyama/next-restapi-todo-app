@@ -4,14 +4,30 @@ import { useRouter } from "next/router";
 import react, { useEffect } from "react";
 import axios from "axios";
 
+type Todo = {
+  id: number;
+  title: String;
+  progress: string;
+};
+
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = react.useState();
+  const [todos, setTodos] = react.useState<Todo[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    axios.get("http://localhost:8000/todos").then((response) => {
-      setTodos(response.data);
-    });
+    axios
+      .get("http://localhost:8000/todos")
+      .then(function (response) {
+        // 処理が成功した場合
+        setTodos(response.data);
+      })
+      .catch(function (error) {
+        // エラー処理
+        console.log(error);
+      })
+      .then(function () {
+        // 常に実行
+      });
   }, []);
 
   // 作成ボタンに対する関数
@@ -40,31 +56,35 @@ const TodoList: React.FC = () => {
         </div>
         <hr />
         <ul className="todos-body">
-          <li>
-            <div className="todo-row">
-              <div className="todo-title">
-                <p>1つ目のTODO</p>
-              </div>
-              <div className="todo-progress">
-                <p>未実施</p>
-              </div>
-              <div className="button-frame">
-                <Button
-                  variant="contained"
-                  size="small"
-                  color="success"
-                  onClick={handleEdit}
-                >
-                  編集
-                </Button>
-              </div>
-              <div className="button-frame">
-                <Button variant="contained" size="small" color="error">
-                  削除
-                </Button>
-              </div>
-            </div>
-          </li>
+          {todos.map((todo) => {
+            return (
+              <li key={todo.id}>
+                <div className="todo-row">
+                  <div className="todo-title">
+                    <p>{todo.title}</p>
+                  </div>
+                  <div className="todo-progress">
+                    <p>{todo.progress}</p>
+                  </div>
+                  <div className="button-frame">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color="success"
+                      onClick={handleEdit}
+                    >
+                      編集
+                    </Button>
+                  </div>
+                  <div className="button-frame">
+                    <Button variant="contained" size="small" color="error">
+                      削除
+                    </Button>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="add-todo">
