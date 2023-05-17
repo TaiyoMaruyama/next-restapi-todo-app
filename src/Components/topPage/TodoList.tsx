@@ -18,15 +18,10 @@ const TodoList: React.FC = () => {
     axios
       .get("http://localhost:8000/todos")
       .then(function (response) {
-        // 処理が成功した場合
         setTodos(response.data);
       })
       .catch(function (error) {
-        // エラー処理
         console.log(error);
-      })
-      .then(function () {
-        // 常に実行
       });
   }, []);
 

@@ -15,14 +15,7 @@ const CreateTodo: React.FC = () => {
   const router = useRouter();
 
   const createTitle = async () => {
-    await axios({
-      method: "post",
-      url: "/todos",
-      data: {
-        title: title,
-        progress: progress,
-      },
-    });
+    axios.post("http://localhost:8000/todos", { title, progress });
     router.push("/");
   };
 
