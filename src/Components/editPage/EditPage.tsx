@@ -6,40 +6,56 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const EditTodo: React.FC = () => {
-  const [age, setAge] = React.useState("");
   const router = useRouter();
+  const getQuery = router.query;
+  const [title, setTitle] = React.useState(getQuery.selectedTodo);
+  const [progress, setProgress] = React.useState(getQuery.selectedProgress);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+  React.useEffect(() => {
+    console.log(getQuery);
+  }, []);
+
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleChangeProgress = (e: SelectChangeEvent) => {
+    setProgress(e.target.value as string);
   };
 
   const handleEdit = () => {
-    router.push("/");
-  };
-
-  const handleCancel = () => {
-    router.push("/");
+    const modify = { title: title, progress: progress };
+    axios
+      .put(`http://localhost:8000/todos/${getQuery.selectedId}`, modify)
+      .then(() => {
+        router.push("/");
+      });
   };
 
   return (
     <div className="create-frame">
       <p>編集を行ってください</p>
       <div className="input-form">
-        <input type="text" className="input" />
+        <input
+          type="text"
+          className="input"
+          value={title}
+          onChange={handleChangeTitle}
+        />
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">進捗</InputLabel>
+            <InputLabel>進捗</InputLabel>
             <Select
-              id="demo-simple-select"
-              value={age}
+              value={`${progress}`}
               label="progress"
-              onChange={handleChange}
+              onChange={handleChangeProgress}
             >
-              <MenuItem value={10}>未実施</MenuItem>
-              <MenuItem value={20}>作業中</MenuItem>
-              <MenuItem value={30}>作業完了</MenuItem>
+              <MenuItem value={"NOT_START"}>未放送</MenuItem>
+              <MenuItem value={"DOING"}>放送中</MenuItem>
+              <MenuItem value={"DONE"}>放送済</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -48,7 +64,7 @@ const EditTodo: React.FC = () => {
         <Button variant="contained" onClick={handleEdit}>
           更新
         </Button>
-        <Button variant="contained" onClick={handleCancel}>
+        <Button variant="contained" onClick={() => router.push("/")}>
           キャンセル
         </Button>
       </div>
