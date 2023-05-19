@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "nodemon ./src/pages/api/todos/server.js",
+    "start": "nodemon ./server/server.js",
     "lint": "next lint"
   },
   "dependencies": {
