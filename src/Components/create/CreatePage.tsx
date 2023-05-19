@@ -9,22 +9,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 const CreateTodo: React.FC = () => {
+  const router = useRouter();
   const [title, setTitle] = React.useState<string>("");
   const [progress, setProgress] = React.useState<string>("");
-
-  const router = useRouter();
-
-  const createTitle = async () => {
-    await axios({
-      method: "post",
-      url: "/todos",
-      data: {
-        title: title,
-        progress: progress,
-      },
-    });
-    router.push("/");
-  };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -34,17 +21,19 @@ const CreateTodo: React.FC = () => {
     setProgress(e.target.value as string);
   };
 
+  const createTitle = async () => {
+    axios.post("http://localhost:8000/todos", { title, progress }).then(() => {
+      router.push("/"); // 非同期処理
+    });
+  };
+
   const handleCreate = () => {
     createTitle();
   };
 
-  const handleCancel = () => {
-    router.push("/");
-  };
-
   return (
     <div className="create-frame">
-      <p>TODOを記入してください</p>
+      <p>あなたの見るべきアニメを記入してください</p>
       <div className="input-form">
         <input
           type="text"
@@ -60,9 +49,9 @@ const CreateTodo: React.FC = () => {
               label="progress"
               onChange={handleChangeProgress}
             >
-              <MenuItem value={"NOT_START"}>未実施</MenuItem>
-              <MenuItem value={"DOING"}>作業中</MenuItem>
-              <MenuItem value={"DONE"}>作業完了</MenuItem>
+              <MenuItem value={"NOT_START"}>未放送</MenuItem>
+              <MenuItem value={"DOING"}>放送中</MenuItem>
+              <MenuItem value={"DONE"}>放送済</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -71,7 +60,7 @@ const CreateTodo: React.FC = () => {
       <Button variant="contained" onClick={handleCreate}>
         作成
       </Button>
-      <Button variant="contained" onClick={handleCancel}>
+      <Button variant="contained" onClick={() => router.push("/")}>
         キャンセル
       </Button>
     </div>

@@ -1,12 +1,12 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import react, { useEffect } from "react";
 import axios from "axios";
 
-type Todo = {
+export type Todo = {
   id: number;
-  title: String;
+  title: string;
   progress: string;
 };
 
@@ -14,30 +14,42 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = react.useState<Todo[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
+  // TODOデータを取得
+  const getDataInfo = async () => {
     axios
       .get("http://localhost:8000/todos")
-      .then(function (response) {
-        // 処理が成功した場合
+      .then((response) => {
         setTodos(response.data);
       })
-      .catch(function (error) {
-        // エラー処理
+      .catch((error) => {
         console.log(error);
-      })
-      .then(function () {
-        // 常に実行
       });
-  }, []);
-
-  // 作成ボタンに対する関数
-  const handleCreate = () => {
-    router.push("/create");
+    console.log("追加されました");
   };
 
-  // 編集ボタンに対する関数
-  const handleEdit = () => {
-    router.push("/edit");
+  // 画面マウント時に発火
+  useEffect(() => {
+    getDataInfo();
+  }, []);
+
+  const jumpEditPage = (
+    selectedId: number,
+    selectedTodo: string,
+    selectedProgress: string
+  ) => {
+    const pathQuery = { selectedId, selectedTodo, selectedProgress };
+    router.push({
+      pathname: "/edit",
+      query: pathQuery,
+    });
+  };
+
+  // 削除する関数
+  // レスポンスがあればデータだけ再取得
+  const handleDelete = (selectedId: number) => {
+    axios.delete(`http://localhost:8000/todos/${selectedId}`).then(() => {
+      getDataInfo();
+    });
   };
 
   return (
@@ -56,42 +68,50 @@ const TodoList: React.FC = () => {
         </div>
         <hr />
         <ul className="todos-body">
-          {todos.map((todo) => {
-            return (
-              <li key={todo.id}>
-                <div className="todo-row">
-                  <div className="todo-title">
-                    <p>{todo.title}</p>
+          {todos.length != 0 &&
+            todos.map((todo) => {
+              return (
+                <li key={todo.id}>
+                  <div className="todo-row">
+                    <div className="todo-title">
+                      <p>{todo.title}</p>
+                    </div>
+                    <div className="todo-progress">
+                      <p>{todo.progress}</p>
+                    </div>
+                    <div className="button-frame">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        color="success"
+                        onClick={() =>
+                          jumpEditPage(todo.id, todo.title, todo.progress)
+                        }
+                      >
+                        編集
+                      </Button>
+                    </div>
+                    <div className="button-frame">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        color="error"
+                        onClick={() => handleDelete(todo.id)}
+                      >
+                        削除
+                      </Button>
+                    </div>
                   </div>
-                  <div className="todo-progress">
-                    <p>{todo.progress}</p>
-                  </div>
-                  <div className="button-frame">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      color="success"
-                      onClick={handleEdit}
-                    >
-                      編集
-                    </Button>
-                  </div>
-                  <div className="button-frame">
-                    <Button variant="contained" size="small" color="error">
-                      削除
-                    </Button>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className="add-todo">
         <Button
           variant="contained"
           endIcon={<AddIcon />}
-          onClick={handleCreate}
+          onClick={() => router.push("/create")}
         >
           新規追加
         </Button>

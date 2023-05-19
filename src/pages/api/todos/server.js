@@ -37,6 +37,30 @@ app.post("/todos", async (req, res) => {
   );
 });
 
+// ユーザーの更新
+app.put("/todos/:id", async (req, res) => {
+  const id = req.params.id;
+  const title = req.body.title;
+  const progress = req.body.progress;
+  pool.query(
+    'UPDATE "Todo" SET title = $1, progress = $2 WHERE id = $3',
+    [title, progress, id],
+    (error, results) => {
+      if (error) throw error;
+      return res.status(200).send("更新しました");
+    }
+  );
+});
+
+// ユーザーの削除
+app.delete("/todos/:id", async (req, res) => {
+  const id = req.params.id;
+  pool.query('DELETE FROM "Todo" WHERE id = $1', [id], (error, results) => {
+    if (error) throw error;
+    return res.status(201).send("削除しました");
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at PORT: ${PORT}`);
 });

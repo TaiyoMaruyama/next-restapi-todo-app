@@ -3,7 +3,9 @@ import { useRouter } from "next/router";
 
 const Header: React.FC = () => {
   const JumpHome = () => {
-    router.push("/");
+    router.push({
+      pathname: "/",
+    });
   };
 
   const router = useRouter();
@@ -12,7 +14,7 @@ const Header: React.FC = () => {
       <div className="header-frame">
         <div className="header-in-frame">
           <h1 className="header-title" onClick={JumpHome}>
-            TODO
+            見たいアニメリスト
           </h1>
           <Button variant="contained" size="small" color="error">
             ログアウト
