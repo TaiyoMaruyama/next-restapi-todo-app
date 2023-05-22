@@ -13,6 +13,7 @@ const EditTodo: React.FC = () => {
   const getQuery = router.query;
   const [title, setTitle] = React.useState(getQuery.selectedTodo);
   const [progress, setProgress] = React.useState(getQuery.selectedProgress);
+  const [emptyCheck, setEmptyCheck] = React.useState(false);
 
   React.useEffect(() => {
     console.log(getQuery);
@@ -26,13 +27,20 @@ const EditTodo: React.FC = () => {
     setProgress(e.target.value as string);
   };
 
+  // バリデーションしてdbに情報更新
   const handleEdit = () => {
+    const checkValue = [title, progress].filter((value) => value == "");
     const modify = { title: title, progress: progress };
-    axios
-      .put(`http://localhost:8000/todos/${getQuery.selectedId}`, modify)
-      .then(() => {
-        router.push("/");
-      });
+    if (checkValue.length !== 0) {
+      setEmptyCheck(true);
+    } else {
+      setEmptyCheck(false);
+      axios
+        .put(`http://localhost:8000/todos/${getQuery.selectedId}`, modify)
+        .then(() => {
+          router.push("/");
+        });
+    }
   };
 
   return (
@@ -67,6 +75,7 @@ const EditTodo: React.FC = () => {
         <Button variant="contained" onClick={() => router.push("/")}>
           キャンセル
         </Button>
+        {emptyCheck && <h3 className="error-message">空欄があります。</h3>}
       </div>
     </div>
   );
