@@ -1,11 +1,13 @@
 import NextAuth from "next-auth";
-import GoogleProviders from "next-auth/providers/google";
+import GoogleProvider from "next-auth/providers/google";
 
 export default NextAuth({
   providers: [
-    GoogleProviders({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  // 本来はランダムな数字のはず
+  secret: "secret",
 });
