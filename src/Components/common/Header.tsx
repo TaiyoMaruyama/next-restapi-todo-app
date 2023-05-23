@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
