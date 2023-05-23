@@ -8,6 +8,6 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  // 本来はランダムな数字のはず
+  // 本来はランダムな数字
   secret: "secret",
 });

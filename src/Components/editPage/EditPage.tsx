@@ -15,10 +15,6 @@ const EditTodo: React.FC = () => {
   const [progress, setProgress] = React.useState(getQuery.selectedProgress);
   const [emptyCheck, setEmptyCheck] = React.useState(false);
 
-  React.useEffect(() => {
-    console.log(getQuery);
-  }, []);
-
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
