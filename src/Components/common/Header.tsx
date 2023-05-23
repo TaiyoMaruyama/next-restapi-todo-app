@@ -1,15 +1,19 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Header = () => {
   const router = useRouter();
-  const { data: session } = useSession();
-
+  const { data: session, status } = useSession();
   useEffect(() => {
-    console.log(session);
-  }, []);
+    if (status === "loading") {
+      return;
+    }
+    if (status === "unauthenticated") {
+      router.replace("/api/auth/signin/google");
+    }
+  }, [session, status]);
 
   return (
     <>
