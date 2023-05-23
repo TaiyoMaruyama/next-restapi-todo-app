@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import useGetData from "@/customHooks/useGetData";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 
 export type Todo = {
   id: number;
@@ -17,6 +16,7 @@ const TodoList: React.FC = () => {
   const { todos, getDataInfo } = useGetData();
   const [modalState, setModalState] = useState<boolean>(false);
   const [deleteAlternate, setDeleteAlternate] = useState({ title: "", id: 0 });
+  const [toastState, setToastState] = useState<Boolean>(false);
 
   // 画面マウント時に発火
   useEffect(() => {
@@ -40,6 +40,8 @@ const TodoList: React.FC = () => {
   const handleDelete = (title: string, id: number) => {
     setDeleteAlternate({ title: title, id: id });
     switchModal();
+    clearTimeout(setTime);
+    setToastState(false);
   };
 
   const deleteTitle = () => {
@@ -50,10 +52,20 @@ const TodoList: React.FC = () => {
       });
     switchModal();
     setDeleteAlternate({ title: "", id: 0 });
+    toastAction();
   };
 
   const switchModal = () => {
     setModalState(!modalState);
+  };
+
+  const setTime = setTimeout(() => {
+    setToastState(false);
+  }, 2700);
+
+  const toastAction = () => {
+    setToastState(true);
+    setTime;
   };
 
   return (
@@ -138,6 +150,11 @@ const TodoList: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+      {toastState && (
+        <div className="toast">
+          <h3>削除しました</h3>
         </div>
       )}
     </>

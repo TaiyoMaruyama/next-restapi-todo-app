@@ -1,5 +1,8 @@
 .header-frame {
   background-color: orange;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }
 
 .header-in-frame {
