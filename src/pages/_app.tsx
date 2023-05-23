@@ -6,6 +6,7 @@ import "@/styles/create.css";
 import "@/styles/edit.css";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
+import { CircularProgress } from "@mui/material";
 
 export default function App({
   Component,
