@@ -16,3 +16,7 @@
   width: 40%;
   margin-top: 40px;
 }
+
+.error-message {
+  color: red;
+}

@@ -1,7 +1,8 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import react, { useEffect } from "react";
+import useGetData from "@/customHooks/useGetData";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export type Todo = {
@@ -11,21 +12,10 @@ export type Todo = {
 };
 
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = react.useState<Todo[]>([]);
   const router = useRouter();
-
-  // TODOデータを取得
-  const getDataInfo = async () => {
-    axios
-      .get("http://localhost:8000/todos")
-      .then((response) => {
-        setTodos(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log("追加されました");
-  };
+  const { todos, getDataInfo } = useGetData();
+  const [modalState, setModalState] = useState<boolean>(false);
+  const [deleteAlternate, setDeleteAlternate] = useState({ title: "", id: 0 });
 
   // 画面マウント時に発火
   useEffect(() => {
@@ -46,10 +36,23 @@ const TodoList: React.FC = () => {
 
   // 削除する関数
   // レスポンスがあればデータだけ再取得
-  const handleDelete = (selectedId: number) => {
-    axios.delete(`http://localhost:8000/todos/${selectedId}`).then(() => {
-      getDataInfo();
-    });
+  const handleDelete = (title: string, id: number) => {
+    setDeleteAlternate({ title: title, id: id });
+    switchModal();
+  };
+
+  const deleteTitle = () => {
+    axios
+      .delete(`http://localhost:8000/todos/${deleteAlternate.id}`)
+      .then(() => {
+        getDataInfo();
+      });
+    switchModal();
+    setDeleteAlternate({ title: "", id: 0 });
+  };
+
+  const switchModal = () => {
+    setModalState(!modalState);
   };
 
   return (
@@ -69,7 +72,7 @@ const TodoList: React.FC = () => {
         <hr />
         <ul className="todos-body">
           {todos.length != 0 &&
-            todos.map((todo) => {
+            todos.map((todo: Todo) => {
               return (
                 <li key={todo.id}>
                   <div className="todo-row">
@@ -96,7 +99,7 @@ const TodoList: React.FC = () => {
                         variant="contained"
                         size="small"
                         color="error"
-                        onClick={() => handleDelete(todo.id)}
+                        onClick={() => handleDelete(todo.title, todo.id)}
                       >
                         削除
                       </Button>
@@ -116,6 +119,26 @@ const TodoList: React.FC = () => {
           新規追加
         </Button>
       </div>
+      {modalState && (
+        <div className="modal-full">
+          <div className="modal-frame">
+            <h4>以下のアニメタイトルを削除してもよろしいですか</h4>
+            <p className="modal-title">{deleteAlternate.title}</p>
+            <div className="modal-button">
+              <div className="modal-button-frame">
+                <Button variant="contained" onClick={deleteTitle}>
+                  削除
+                </Button>
+              </div>
+              <div className="modal-button-frame">
+                <Button variant="contained" onClick={switchModal}>
+                  キャンセル
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

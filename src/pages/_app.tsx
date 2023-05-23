@@ -4,8 +4,7 @@ import "@/styles/userInfo.css";
 import "@/styles/todoList.css";
 import "@/styles/create.css";
 import "@/styles/edit.css";
-import { SessionProvider } from "next-auth/react";
-
+import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 
 export default function App({

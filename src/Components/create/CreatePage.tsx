@@ -12,19 +12,31 @@ const CreateTodo: React.FC = () => {
   const router = useRouter();
   const [title, setTitle] = React.useState<string>("");
   const [progress, setProgress] = React.useState<string>("");
+  const [emptyCheck, setEmptyCheck] = React.useState(false);
 
+  // インプットの入力値取得
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
+  // 選択肢の入力値取得
   const handleChangeProgress = (e: SelectChangeEvent) => {
     setProgress(e.target.value as string);
   };
 
-  const createTitle = async () => {
-    axios.post("http://localhost:8000/todos", { title, progress }).then(() => {
-      router.push("/"); // 非同期処理
-    });
+  // バリデーションしてdbに情報追加
+  const createTitle = () => {
+    const checkValue = [title, progress].filter((value) => value == "");
+    if (checkValue.length !== 0) {
+      setEmptyCheck(true);
+    } else {
+      setEmptyCheck(false);
+      axios
+        .post("http://localhost:8000/todos", { title, progress })
+        .then(() => {
+          router.push("/"); // 非同期処理
+        });
+    }
   };
 
   const handleCreate = () => {
@@ -63,6 +75,7 @@ const CreateTodo: React.FC = () => {
       <Button variant="contained" onClick={() => router.push("/")}>
         キャンセル
       </Button>
+      {emptyCheck && <h3 className="error-message">空欄があります。</h3>}
     </div>
   );
 };
