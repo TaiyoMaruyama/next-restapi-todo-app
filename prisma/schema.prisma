@@ -18,3 +18,8 @@ enum Progress {
   DOING
   DONE
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  
+}
