@@ -1,9 +1,26 @@
 import Header from "@/Components/common/Header";
-import TodoList from "@/Components/topPage/TodoList";
+import TodoList, { Todo } from "@/Components/topPage/TodoList";
 import UserInfo from "@/Components/common/UserInfo";
 import Head from "next/head";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 
-export default function Home() {
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await axios.get("http://localhost:8000/todos");
+  const data = await response.data;
+  console.log(data);
+  return {
+    props: {
+      todos: data,
+    },
+  };
+};
+
+type HomeProps = {
+  todos: Todo[];
+};
+
+export default function Home({ todos }: HomeProps) {
   return (
     <>
       <Head>
@@ -12,7 +29,7 @@ export default function Home() {
       <Header />
       <div className="max-width">
         <UserInfo />
-        <TodoList />
+        <TodoList todos={todos} />
       </div>
     </>
   );

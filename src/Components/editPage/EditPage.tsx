@@ -7,13 +7,14 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useState } from "react";
 
 const EditTodo: React.FC = () => {
   const router = useRouter();
   const getQuery = router.query;
-  const [title, setTitle] = React.useState(getQuery.selectedTodo);
-  const [progress, setProgress] = React.useState(getQuery.selectedProgress);
-  const [emptyCheck, setEmptyCheck] = React.useState(false);
+  const [title, setTitle] = useState(getQuery.selectedTodo);
+  const [progress, setProgress] = useState(getQuery.selectedProgress);
+  const [emptyCheck, setEmptyCheck] = useState(false);
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);

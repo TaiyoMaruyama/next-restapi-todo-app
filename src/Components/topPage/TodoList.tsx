@@ -1,10 +1,8 @@
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import useGetData from "@/customHooks/useGetData";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 
 export type Todo = {
   id: number;
@@ -12,16 +10,10 @@ export type Todo = {
   progress: string;
 };
 
-const TodoList: React.FC = () => {
+const TodoList: React.FC<{ todos: Todo[] }> = ({ todos }) => {
   const router = useRouter();
-  const { todos, getDataInfo } = useGetData();
   const [modalState, setModalState] = useState<boolean>(false);
   const [deleteAlternate, setDeleteAlternate] = useState({ title: "", id: 0 });
-
-  // 画面マウント時に発火
-  useEffect(() => {
-    getDataInfo();
-  }, []);
 
   const jumpEditPage = (
     selectedId: number,
@@ -35,8 +27,6 @@ const TodoList: React.FC = () => {
     });
   };
 
-  // 削除する関数
-  // レスポンスがあればデータだけ再取得
   const handleDelete = (title: string, id: number) => {
     setDeleteAlternate({ title: title, id: id });
     switchModal();
@@ -46,7 +36,7 @@ const TodoList: React.FC = () => {
     axios
       .delete(`http://localhost:8000/todos/${deleteAlternate.id}`)
       .then(() => {
-        getDataInfo();
+        location.reload();
       });
     switchModal();
     setDeleteAlternate({ title: "", id: 0 });
@@ -72,8 +62,8 @@ const TodoList: React.FC = () => {
         </div>
         <hr />
         <ul className="todos-body">
-          {todos.length != 0 &&
-            todos.map((todo: Todo) => {
+          {todos?.length != 0 &&
+            todos?.map((todo: Todo) => {
               return (
                 <li key={todo.id}>
                   <div className="todo-row">

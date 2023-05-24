@@ -7,12 +7,13 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useState } from "react";
 
 const CreateTodo: React.FC = () => {
   const router = useRouter();
-  const [title, setTitle] = React.useState<string>("");
-  const [progress, setProgress] = React.useState<string>("");
-  const [emptyCheck, setEmptyCheck] = React.useState(false);
+  const [title, setTitle] = useState<string>("");
+  const [progress, setProgress] = useState<string>("");
+  const [emptyCheck, setEmptyCheck] = useState(false);
 
   // インプットの入力値取得
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
